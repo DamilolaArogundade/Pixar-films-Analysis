@@ -15,3 +15,13 @@ This SQL project examines Pixar films to understand their performance, audience 
 - Recommendation
 - Conclusion
 
+### Project Overview
+###Project Scope
+
+The analysis focused on four main areas:
+
+- Box Office Performance – Domestic, international, and worldwide sales compared to budgets.
+- Awards Analysis – Number and type of awards won per film.
+- Ratings Comparison – Multiple rating sources (Rotten Tomatoes, Metacritic, IMDB, CinemaScore).
+- Trend Analysis – How genres and ratings have evolved over decades.
+- Sequel vs. Original Analysis – Comparing franchise films like Cars, Toy Story, and The Incredibles.
