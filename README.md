@@ -1,5 +1,5 @@
 # Pixar-films-Analysis
-This SQL project examines Pixar films to understand their performance, audience reception, and evolution. By running structured SQL queries, the project uncovers insights that highlight both the business impact and the entertainment value of Pixar’s movies.
+This SQL project examines a dataset of Pixar films obtained from Maven Analytics to understand their performance, audience reception, and evolution. By running structured SQL queries, the project uncovers insights that highlight both the business impact and the entertainment value of Pixar’s movies.
 
 ## Table of contents
 
