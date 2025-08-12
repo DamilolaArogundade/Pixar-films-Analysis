@@ -16,7 +16,7 @@ This SQL project examines a dataset of Pixar films obtained from Maven Analytics
 - Conclusion
 
 ### Project Overview
-###Project Scope
+### Project Scope
 
 The analysis focused on four main areas:
 
