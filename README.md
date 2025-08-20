@@ -84,7 +84,51 @@ The following procedures were carried out during the data processing phase.
 - **Created Database:** A database named Pixar_films was created in SQL to house the tables imported from the dataset. That was done using the query below
 
 ``` SQL
-  Create database
-          Pixar_films
+  CREATE DATABASE Pixar_films
 ```
+
+The queries below are used to display the tables and all the information contained within them.
+
+``` SQL
+Select *
+From academy
+
+Select *
+From box_office
+
+Select *
+From genres
+
+Select *
+From pixar_films
+
+Select *
+From pixar_people
+
+Select *
+From public_response
+```
+
+- **Created relationships between tables:** Active relationships were created between tables using common columns (keys), where the table that has a column with the unique values has the primary key, and the table with the column related but does not have unique values has the foreign key. In SQL,  an active relationship serves as the default link between tables, which is used for filtering and calculations. 
+
+A relationship was created between the box_office table and the academy table
+
+Box_office table has a column with unique values, so box_office will have the primary key
+
+```SQL
+Alter table box_office
+Add constraint pk_film_box_office
+Primary key (film)  
+```
+
+To join the academy table, it will have a foreign key
+``` SQL
+Alter table academy
+Add constraint fk_film_academy
+Foreign key (film) references box_office (film)
+```
+
+
+
+
 
