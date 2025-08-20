@@ -76,3 +76,15 @@ With a relational structure across these tables, the dataset enables analysts to
 Overall, this dataset provides a robust foundation for practicing SQL queries and uncovering storytelling, marketing, and critical trends that have shaped Pixar’s legacy.
 
 ## Data Cleaning and Processing
+
+After conducting data profiling, the dataset used for this analysis was found to be well-structured and consistent, with no significant issues that could impede analysis or interpretation. The data is in a standardized format, follows consistent naming conventions, and contains all required fields. The data values are accurate, columns are assigned appropriate data types, and there are no duplicate records.
+
+The following procedures were carried out during the data processing phase.
+
+- **Created Database:** A database named Pixar_films was created in SQL to house the tables imported from the dataset. That was done using the query below
+
+``` SQL
+  Create database
+          Pixar_films
+```
+
