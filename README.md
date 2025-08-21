@@ -128,6 +128,74 @@ Add constraint fk_film_academy
 Foreign key (film) references box_office (film)
 ```
 
+A relationship was also created between the box_office table and the genres table
+
+The genres table will also have a foreign key 
+```SQL
+Alter table genres
+Add constraint fk_film_genres
+Foreign key (film) references box_office (film)  
+```
+
+## Data Analysis and Insight
+
+The objective of this analysis is to provide answers to the following questions:
+
+-  Which films have performed the best at the box office? Did they have the highest budget?
+- Which films received the most awards? Are they also the best rated?
+- How do sequels compare to their original?
+- Have genres and ratings evolved over time?
+
+**1. Which films have performed the best at the box office? Did they have the highest budget?**
+
+The main goal of these questions is to evaluate how Pixar movies performed at the box office and to analyze whether budget size influenced that performance. The results of this analysis will provide insights into whether investing in higher-budget productions leads to greater financial success, while also giving the company a clearer picture of how well its films have performed overall.
+
+a. Which films have performed the best at the box office? 
+
+To determine the movies' performances at the box offices, their performances at each box office will be evaluated. 
+
+```SQL
+Select top 1 film, box_office_us_canada
+From box_office
+Group by film, box_office_us_canada
+Order by box_office_us_canada desc  
+```
+
+The result above shows that Inside Out 2 performed the best at the US/Canada box office.
+
+```SQL
+Select top 1 film, box_office_other
+From box_office
+Group by film, box_office_other
+Order by box_office_other  desc
+```
+The result above shows that Inside Out 2 performed the best at other box offices.
+
+ ```SQL
+Select top 1 film, box_office_worldwide
+From box_office
+Group by film, box_office_worldwide
+Order by box_office_worldwide desc
+```
+
+The result above shows that Inside Out 2 performed the best at the worldwide box office
+
+b. Did they have the highest budget?
+
+To evaluate whether the top-performing movies at the box office were also the ones with the highest budgets, we first generate a list of films ranked by budget size. We then compare these results with the earlier findings on box office performance. This allows us to see if higher spending directly correlates with greater financial success. The SQL query below retrieves the movies with the largest budgets for this comparison.
+
+```SQL
+Select film, Budget
+From box_office
+Group by film,budget
+Order by budget  desc
+```
+
+The result above shows all the movies with the highest budgets, which are. Inside Out is one of the movies with the highest budgets.
+
+In conclusion, Inside Out 2 achieved the strongest performance across all global box offices and also ranked among the films with the highest production budgets. This suggests that the significant investment contributed to its worldwide success
+
+**2. Which films received the most awards? Are they also the best rated?**
 
 
 
