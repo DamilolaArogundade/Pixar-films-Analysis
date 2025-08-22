@@ -197,6 +197,43 @@ In conclusion, Inside Out 2 achieved the strongest performance across all global
 
 **2. Which films received the most awards? Are they also the best rated?**
 
+The purpose of this analysis is to evaluate the performance of Pixar movies by examining both the number of awards they have won and their ratings across different review platforms. By comparing these two factors, we aim to understand whether strong ratings are a reliable indicator of award success or if award recognition can also influence how a film is rated.
 
+a. Which films received the most awards
 
+To determine the films that received the most awards, we will only filter out films that won an award(s) using the query below
 
+```SQL
+Select  film, award_type, [status]
+From academy
+Where [status] like 'w%'
+Group by  film, award_type, [status]
+```
+```SQL
+Select film, 
+ Count ([status]) as number_of_awards_won
+From  (Select film, award_type, [status]
+      From academy
+      Where [status] like 'w%'
+      Group by film, award_type, [status]) as dd
+Group by  film
+Order by count ([status]) desc   
+```
+
+The results above show that Coco, Soul, The Incredibles, Toy Story 3, and Up received the most awards. Each won 2 awards.
+
+The awards won table was saved in the database as an independent table using the query below
+
+```SQL
+Select *
+Into awards_worn
+From (Select film, 
+    count ([status]) as number_of_awards_won
+     From (Select film, award_type, [status]
+      From academy
+      Where [status] like 'w%'
+      Group by film, award_type, [status]) as dd
+       group by film) as dd
+```
+
+ b. Are they also the best rated?
