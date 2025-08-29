@@ -161,6 +161,11 @@ Group by film, box_office_us_canada
 Order by box_office_us_canada desc  
 ```
 
+| Film | box_office_us_canada |
+|------|----------------------|
+| Inside Out 2 | 652980194 |
+
+
 The result above shows that Inside Out 2 performed the best at the US/Canada box office.
 
 ```SQL
@@ -169,6 +174,10 @@ From box_office
 Group by film, box_office_other
 Order by box_office_other  desc
 ```
+| Film | box_office_other |
+|------|----------------------|
+| Inside Out 2 | 1045050771 |
+
 The result above shows that Inside Out 2 performed the best at other box offices.
 
  ```SQL
@@ -177,6 +186,9 @@ From box_office
 Group by film, box_office_worldwide
 Order by box_office_worldwide desc
 ```
+| Film | box_office_worldwide |
+|------|----------------------|
+| Inside Out 2 | 1698030965 |
 
 The result above shows that Inside Out 2 performed the best at the worldwide box office
 
@@ -190,6 +202,19 @@ From box_office
 Group by film,budget
 Order by budget  desc
 ```
+| Film | Budget |
+|------|--------|
+| Incredibles 2 | 200000000 |
+| Finding Dory | 200000000 |
+| Elemental | 200000000 |
+| Cars 2 | 200000000 |
+|Inside Out 2 | 200000000 |
+| Lightyear | 200000000 |
+| Monsters University | 200000000 |
+| Toy Story 3 | 200000000 |
+| Toy Story 4 | 200000000 |
+| Brave | 185000000 |
+
 
 The result above shows all the movies with the highest budgets, which are. Inside Out is one of the movies with the highest budgets.
 
@@ -209,6 +234,27 @@ From academy
 Where [status] like 'w%'
 Group by  film, award_type, [status]
 ```
+| Film | Award type | Status |
+|------|------------|--------|
+| Brave | Animated Feature | Won |
+| Coco | Animated Feature | Won |
+| Coco | Original Song | Won |
+| Finding Nemo | Animated Feature | Won |
+| Inside Out | Animated Feature | Won |
+| Monsters, Inc. | Original Song | Won |
+| Ratatouille | Animated Feature | Won |
+| Soul | Animated Feature | Won |
+| Soul | Original Score | Won |
+| The Incredibles | Animated Feature | Won |
+| The Incredibles | Sound Editing | Won |
+| Toy Story | Other | Won |
+| Toy Story 3 | Animated Feature | Won |
+| Toy Story 3 | Original Song | Won |
+| Toy Story 4 | Animated Feature | Won |
+| Up | Animated Feature | Won |
+| Up | Original Score | Won |
+| WALL-E | Animated Feature | Won |
+
 ```SQL
 Select film, 
  Count ([status]) as number_of_awards_won
@@ -219,6 +265,21 @@ From  (Select film, award_type, [status]
 Group by  film
 Order by count ([status]) desc   
 ```
+| Film | Number of awards won |
+|------|----------------------|
+| Coco | 2 |
+| Soul | 2 |
+| The Incredibles | 2 |
+| Toy Story 3 | 2 |
+| Up | 2 |
+| WALL-E | 1 |
+| Brave | 1 |
+| Toy Story 4 | 1 |
+| Toy Story | 1 |
+| Finding Nemo | 1 |
+| Inside Out | 1 |
+| Monsters, Inc. | 1 |
+| Ratatouille | 1 |
 
 The results above show that Coco, Soul, The Incredibles, Toy Story 3, and Up received the most awards. Each won 2 awards.
 
@@ -237,3 +298,19 @@ From (Select film,
 ```
 
  b. Are they also the best rated?
+
+```SQL
+Select top 5 film, rotten_tomatoes_score
+From public_response
+Group by film, rotten_tomatoes_score
+order by rotten_tomatoes_score desc   
+```
+| Film | rotten_tomatoes_score |
+|------|-----------------------|
+| Toy Story | 100 |
+| Toy Story 2 | 100 |
+| Finding Nemo | 99 |
+| Inside Out | 98 |
+| Toy Story 3 | 98 |
+
+
