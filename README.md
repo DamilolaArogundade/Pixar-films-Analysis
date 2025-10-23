@@ -146,11 +146,11 @@ The objective of this analysis is to provide answers to the following questions:
 - How do sequels compare to their original?
 - Have genres and ratings evolved over time?
 
-**1. Which films have performed the best at the box office? Did they have the highest budget?**
+### 1. Which films have performed the best at the box office? Did they have the highest budget?
 
 The main goal of these questions is to evaluate how Pixar movies performed at the box office and to analyze whether budget size influenced that performance. The results of this analysis will provide insights into whether investing in higher-budget productions leads to greater financial success, while also giving the company a clearer picture of how well its films have performed overall.
 
-a. Which films have performed the best at the box office? 
+**a. Which films have performed the best at the box office?**
 
 To determine the movies' performances at the box offices, their performances at each box office will be evaluated. 
 
@@ -192,7 +192,7 @@ Order by box_office_worldwide desc
 
 The result above shows that Inside Out 2 performed the best at the worldwide box office
 
-b. Did they have the highest budget?
+**b. Did they have the highest budget?**
 
 To evaluate whether the top-performing movies at the box office were also the ones with the highest budgets, we first generate a list of films ranked by budget size. We then compare these results with the earlier findings on box office performance. This allows us to see if higher spending directly correlates with greater financial success. The SQL query below retrieves the movies with the largest budgets for this comparison.
 
@@ -220,11 +220,11 @@ The result above shows all the movies with the highest budgets, which are. Insid
 
 In conclusion, Inside Out 2 achieved the strongest performance across all global box offices and also ranked among the films with the highest production budgets. This suggests that the significant investment contributed to its worldwide success
 
-**2. Which films received the most awards? Are they also the best rated?**
+### 2. Which films received the most awards? Are they also the best rated?
 
 The purpose of this analysis is to evaluate the performance of Pixar movies by examining both the number of awards they have won and their ratings across different review platforms. By comparing these two factors, we aim to understand whether strong ratings are a reliable indicator of award success or if award recognition can also influence how a film is rated.
 
-a. Which films received the most awards
+**a. Which films received the most awards**
 
 To determine the films that received the most awards, we will only filter out films that won an award(s) using the query below
 
@@ -254,6 +254,8 @@ Group by  film, award_type, [status]
 | Up | Animated Feature | Won |
 | Up | Original Score | Won |
 | WALL-E | Animated Feature | Won |
+
+An SQL query was then written to calculate the total number of awards won by each movie, allowing for a clearer comparison of award performance across all films.
 
 ```SQL
 Select film, 
@@ -297,7 +299,9 @@ From (Select film,
        group by film) as dd
 ```
 
- b. Are they also the best rated?
+ **b. Are they also the best rated?**
+
+To determine whether the movies that won the most awards are also the highest-rated, we analysed film ratings across all available review criteria and then compared these results with the list of top award-winning films.
 
 ```SQL
 Select top 5 film, rotten_tomatoes_score
@@ -305,6 +309,7 @@ From public_response
 Group by film, rotten_tomatoes_score
 order by rotten_tomatoes_score desc   
 ```
+
 | Film | rotten_tomatoes_score |
 |------|-----------------------|
 | Toy Story | 100 |
@@ -313,4 +318,113 @@ order by rotten_tomatoes_score desc
 | Inside Out | 98 |
 | Toy Story 3 | 98 |
 
+The result above shows that Toy Story and Toy Story 2 are the top-rated movies using the Rotten Tomatoes criteria. Using this criterion, the movies that won awards are not the best rated.
 
+
+```SQL
+Select top 5 film, metacritic_score
+From public_response
+Group by film, metacritic_score
+order by metacritic_score desc     
+```
+| Film | metacritic_score |
+|------|------------------|
+| Ratatouille | 96 |
+| Toy Story | 95 |
+| WALL-E | 95 |
+| Inside Out | 94 |
+| Toy Story 3 | 92 |
+
+The result above shows that Ratatouille is the top-rated movie using the Metacritic criteria. Using this criterion, the movies that won awards are not the best rated.
+
+
+```SQL
+Select top 5 film, imdb_score
+From  public_response
+Group by film, imdb_score
+order by imdb_score desc 
+```
+
+| Film | imdb_score |
+|------|------------|
+| Coco | 8.39999961853027 |
+| WALL-E | 8.39999961853027 |
+| Toy Story | 8.30000019073486 |
+| Toy Story 3 | 8.30000019073486 |
+| Up | 8.30000019073486 |
+
+The result above shows that Coco and Wall-E are the top-rated movies using the IMDb criteria. Using this criterion, Coco won the most awards and was also the best rated.
+
+
+```SQL
+Select *
+Into IMDB_criteria
+From (Select film, imdb_score
+     From public_response
+      Group by film, imdb_score) as dd   
+```
+
+```SQL
+Select film, cinema_score, Cinema_score_no
+From public_response
+Group by film, cinema_score, Cinema_score_no
+order by Cinema_score_no asc       
+```
+
+| Film | Cinema score | Cinema score number |
+|------|--------------|---------------------|
+| Coco | A+| 1 |
+| Finding Nemo | A+ | 1 |
+| Incredibles 2 | A+ | 1 |
+| Monsters, Inc. | A+ | 1 |
+| The Incredibles | A+ | 1 |
+| Toy Story 2 | A+ | 1 |
+| Up | A+ | 1 |
+| A Bug's Life | A | 2 |
+| Brave | A | 2 |
+| Cars | A | 2 |
+
+These are the best-rated movies according to the CinemaScore criteria. Coco, Finding Nemo, Incredibles 2, Monsters Inc., The Incredibles, Toy Story 2, and Up are the top-rated movies.
+
+```SQL
+Select *
+Into Cinema_criteria
+From (Select film, cinema_score, Cinema_score_no
+      From public_response
+      Group by film, cinema_score, Cinema_score_no) as dd 
+```
+
+Relationship between cinema criteria and awards won
+
+```SQL
+Alter table Cinema_criteria
+Add constraint Pk_film_cinema_criteria
+Primary key (film)
+```
+
+```SQL
+Alter Table awards_worn
+Add constraint Fk_film_awards_worn
+Foreign key (film) references cinema_criteria (film)
+```
+
+```SQL
+Select top 3 awards_worn.film, number_of_awards_won, cinema_score
+From awards_worn
+inner join Cinema_criteria
+on
+awards_worn.film = Cinema_criteria.film
+Where cinema_score = 'A+'
+group by awards_worn.film, number_of_awards_won, cinema_score
+Order by number_of_awards_won desc              
+```
+
+| Film | Number of awards won | Cinema score |
+|------|----------------------|--------------|
+| Coco | 2 | A+ |
+| The Incredibles | 2 | A+ |
+| Up | 2 | A+ |
+
+### 3. How do sequels compare to their originals?
+
+### 4. Have genres and ratings evolved over time?
