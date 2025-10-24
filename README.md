@@ -394,6 +394,8 @@ From (Select film, cinema_score, Cinema_score_no
       Group by film, cinema_score, Cinema_score_no) as dd 
 ```
 
+The query above is used to save the CinemaScore table in the database for further reference.
+
 Relationship between cinema criteria and awards won
 
 ```SQL
@@ -419,11 +421,15 @@ group by awards_worn.film, number_of_awards_won, cinema_score
 Order by number_of_awards_won desc              
 ```
 
+The Query above is used to compare the movies that won awards and the CinemaScore table to show if the movies that won awards are also the best rated.
+
 | Film | Number of awards won | Cinema score |
 |------|----------------------|--------------|
 | Coco | 2 | A+ |
 | The Incredibles | 2 | A+ |
 | Up | 2 | A+ |
+
+The result above shows that Coco, The Incredibles, and Up won the most awards and were also the best rated.
 
 ### 3. How do sequels compare to their originals?
 
