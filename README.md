@@ -301,7 +301,7 @@ From (Select film,
 
  **b. Are they also the best rated?**
 
-To determine whether the movies that won the most awards are also the highest-rated, we analysed film ratings across all available review criteria and then compared these results with the list of top award-winning films.
+To determine whether the movies that won the most awards are also the highest-rated, we analysed film ratings across all available review criteria. Then we compared these results with the list of top award-winning films.
 
 ```SQL
 Select top 5 film, rotten_tomatoes_score
@@ -318,7 +318,7 @@ order by rotten_tomatoes_score desc
 | Inside Out | 98 |
 | Toy Story 3 | 98 |
 
-The result above shows that Toy Story and Toy Story 2 are the top-rated movies using the Rotten Tomatoes criteria. Using this criterion, the movies that won awards are not the best rated.
+The results above show that Toy Story and Toy Story 2 are the top-rated movies according to the Rotten Tomatoes criteria. Using this criterion, the movies that won awards are not the best rated.
 
 
 ```SQL
@@ -396,7 +396,7 @@ From (Select film, cinema_score, Cinema_score_no
 
 The query above is used to save the CinemaScore table in the database for further reference.
 
-Relationship between cinema criteria and awards won
+A relationship was created between cinema criteria and awards won for further analysis.
 
 ```SQL
 Alter table Cinema_criteria
