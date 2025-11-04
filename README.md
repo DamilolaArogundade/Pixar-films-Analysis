@@ -9,8 +9,8 @@ This SQL project examines a dataset of Pixar films obtained from Maven Analytics
 - [Document Purpose](https://github.com/DamilolaArogundade/Pixar-films-Analysis#business-objectives)
 - [Use Case](https://github.com/DamilolaArogundade/Pixar-films-Analysis#use-case)
 - [Dataset Overview](https://github.com/DamilolaArogundade/Pixar-films-Analysis#dataset-overview)
-- Data Cleaning and Processing
-- Data Analysis and Insight
+- [Data Cleaning and Processing](https://github.com/DamilolaArogundade/Pixar-films-Analysis?tab=readme-ov-file#data-cleaning-and-processing)
+- [Data Analysis and Insight](https://github.com/DamilolaArogundade/Pixar-films-Analysis?tab=readme-ov-file#data-analysis-and-insight)
 - Recommendation
 - Conclusion
 
@@ -432,5 +432,225 @@ The Query above is used to compare the movies that won awards and the CinemaScor
 The result above shows that Coco, The Incredibles, and Up won the most awards and were also the best rated.
 
 ### 3. How do sequels compare to their originals?
+
+The purpose of this analysis is to evaluate how well each sequel performed compared to its original film. By comparing their box office results, ratings, and awards, we can assess whether producing sequels is a worthwhile investment or identify potential factors that contributed to underperformance. The films included in this analysis are Cars, Finding Nemo and Finding Dory, Inside Out, Monsters, Inc. and Monsters University, The Incredibles, and Toy Story.
+
+To analyze this, a relationship was created between the box office table and the academy to see their performances compared to the sequels
+
+```SQL
+Alter table public_response
+Add constraint FK_film_public_response
+Foreign key (film) references box_office (film) 
+```
+
+```SQL
+Select Box_office.film, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score, box_office_us_canada, box_office_other, box_office_worldwide
+From box_office
+Inner join public_response
+on
+box_office.film = public_response.film
+Group by box_office.film, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score, box_office_us_canada, box_office_other, box_office_worldwide
+```
+
+A new table titled “Ratings and Box Office Performance” was created and stored in the database using the query below. This table was derived from the relationship established between the Box Office and Awards tables, allowing for easier analysis of how financial success relates to award achievements.
+
+```SQL
+Select *
+Into Ratings_and_box_office_performance
+From (Select Box_office.film, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score, box_office_us_canada, box_office_other, box_office_worldwide
+       From box_office
+       Inner join public_response
+         on
+       box_office.film = public_response.film
+       Group by box_office.film, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score, box_office_us_canada, box_office_other, box_office_worldwide) as dd
+```
+
+Another relationship was established between the ratings and box office performance table and the awards table to provide a more comprehensive view of each film’s overall success from multiple perspectives—financial, critical, and audience-based, using the query below.
+
+```SQL
+Alter table Ratings_and_box_office_performance
+Add constraint pk_film_Ratings_and_box_office_performance
+Primary key (film)
+```
+
+```SQL
+Select Ratings_and_box_office_performance.film, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score, box_office_us_canada, box_office_other, box_office_worldwide, number_of_awards_won
+From Ratings_and_box_office_performance
+Inner join awards_worn
+on
+Ratings_and_box_office_performance.film = awards_worn.film
+Group by Ratings_and_box_office_performance.film, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score, box_office_us_canada, box_office_other, box_office_worldwide, number_of_awards_won
+```
+
+The new derived is named 'Relationship table' and saved in the database as an independent table for further analysis using the query below
+
+```SQL
+Select *
+Into relationship_table
+From (Select Ratings_and_box_office_performance.film, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score, box_office_us_canada, box_office_other, box_office_worldwide, number_of_awards_won
+From Ratings_and_box_office_performance
+Inner join awards_worn
+on
+Ratings_and_box_office_performance.film = awards_worn.film
+Group by Ratings_and_box_office_performance.film, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score, box_office_us_canada, box_office_other, box_office_worldwide, number_of_awards_won) as dd
+```
+
+**Cars**
+
+Beginning with the first film that has a sequel—Cars—the analysis focuses on the Ratings and Box Office Performance table, as none of the films in this series received any awards. This allows us to evaluate their performance based solely on financial results and audience ratings.
+
+```SQL
+Select *
+From Ratings_and_box_office_performance[dbo]
+Where film like 'car%'    
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|
+| Cars | 75 | 73 | A | 7.19999980926514 | 244082982 | 217900167 | 461983149 |
+| Cars 2 | 40 | 57 | A- | 6.19999980926514 | 191452396 | 368400000 | 559852396 |
+| Cars 3 | 69 | 59 | A | 6.69999980926514 | 152901115 | 231029541 | 383930656 |
+
+From the analysis above, the original Cars movie outperformed its sequels across all evaluation criteria. It achieved higher ratings on every review platform and recorded the strongest performance in both domestic and international box offices.
+
+**Finding Nemo and Finding Dory**
+
+Finding Nemo is the original, while Finding Dory is the sequel. The analysis incorporates all available performance metrics using both the ratings and box office performance table and the relationship table to provide a comprehensive comparison between the two movies.
+
+```SQL
+Select *
+From Ratings_and_box_office_performance
+Where film like 'Finding%'     
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|
+| Finding Dory | 94 | 77 | A | 7.19999980926514 | 486295561 | 542275328 | 1028570889 |
+| Finding Nemo | 99 | 90 | A+ | 8.19999980926514 | 339714978 | 531300000 | 871014978 |
+
+```SQL
+Select *
+From relationship_table
+Where film like 'Finding%'     
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide | number_of_awards_won |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|----------------------|
+| Finding Nemo | 99 | 90 | A+ | 8.19999980926514 | 339714978 | 531300000 | 871014978 | 1 |
+
+From the analysis above, Finding Nemo (the original) outperformed Finding Dory in most criteria and also received an award, indicating stronger overall critical and audience reception.
+
+**Inside Out**
+
+For the Inside Out films, Inside Out is the original, and Inside Out 2 is the sequel. The analysis will be done using both the ratings and the box office performance table and the relationship table to provide a comprehensive comparison between the two movies.
+
+```SQL
+Select *
+From Ratings_and_box_office_performance
+Where film like 'inside%'  
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|
+| Inside Out | 98 | 94 | A | 8.10000038146973 | 356461711 | 501149463 | 857611174 |
+| Inside Out 2 | 90 | 73 | A | 7.59999990463257 | 652980194 | 1045050771 | 1698030965 |
+
+```SQL
+Select *
+From relationship_table
+Where film like 'inside%'     
+```
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide | number_of_awards_won |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|----------------------|
+| Inside Out | 98 | 94 | A | 8.10000038146973 | 356461711 | 501149463 | 857611174 | 1 |
+
+From the analysis above, while Inside Out 2 achieved higher box office revenue, the original Inside Out received better ratings across most platforms and also earned an award. This suggests that the original film had a greater critical impact, even if the sequel performed better commercially.
+
+**Toy Story**
+
+For the Toy Story collections, Toy Story being the original, the analysis will be done using both the ratings and box office performance table and the relationship table to provide a comprehensive comparison between all the movies.
+
+```SQL
+Select *
+From Ratings_and_box_office_performance
+Where film like 'toy%' 
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|
+| Toy Story | 100 | 95 | A | 8.30000019073486 | 223225679 | 171210907 | 394436586 |
+| Toy Story 2 | 100 | 88 | A+ | 7.90000009536743 | 245852179 | 265506097 | 511358276 | 
+| Toy Story 3 | 98 | 92 | A | 8.30000019073486 | 415004880 | 651964823 | 1066969703 |
+| Toy Story 4 | 97 | 84 | A | 7.59999990463257 | 434038008 | 639356585 | 1073394593 |
+
+```SQL
+Select *
+From relationship_table
+Where film like 'toy%'
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide | number_of_awards_won |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|----------------------|
+| Toy Story | 100 | 95 | A | 8.30000019073486 | 223225679 | 171210907 | 394436586 | 1 |
+| Toy Story 3 | 98 | 92 | A | 8.30000019073486 | 415004880 | 651964823 | 1066969703 | 2 |
+| Toy Story 4 | 97 | 84 | A | 7.59999990463257 | 434038008 | 639356585 | 1073394593 | 1 |
+
+From the analysis above, the original Toy Story maintained higher ratings on most review platforms, while Toy Story 3 received more awards. This reflects how later sequels can achieve strong recognition despite slightly lower ratings.
+
+**Monsters, Inc. and Monsters University**
+
+For the movies Monsters, Inc. and Monsters University, Monsters, Inc. being the original and Monsters University being the sequel, the analysis will be done using both the ratings and box office performance table and the relationship table to provide a comprehensive comparison between the two movies.
+
+```SQL
+Select *
+From Ratings_and_box_office_performance
+Where film like 'monster%' 
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|
+| Monsters University | 80 | 65 | A | 7.19999980926514 | 268492764 | 475066843 | 743559607 |
+| Monsters, Inc. | 96 | 79 | A+ | 8.10000038146973 | 255873250 | 272900000 | 528773250 |
+
+```SQL
+Select *
+From relationship_table
+Where film like 'monster%'
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide | number_of_awards_won |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|----------------------|
+| Monsters, Inc. | 96 | 79 | A+ | 8.10000038146973 | 255873250 | 272900000 | 528773250 | 1 |
+
+From the analysis above, the results reveal that Monsters, Inc. (the original) performed better in most rating categories and also won an award, suggesting that the first film had a stronger critical and emotional connection with audiences than its sequel.
+
+**The Incredibles**
+
+For the Incredibles collection —The Incredibles as the original and Incredibles 2 as the sequel — the analysis incorporated the Ratings, Awards, and Box Office Performance tables.
+
+```SQL
+Select *
+From Ratings_and_box_office_performance
+Where film like '%incredible%' 
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|
+| Incredibles 2 | 93 | 80 | A+ | 7.5 | 608581744 | 634223615 | 1242805359 |
+| The Incredibles | 97 | 90 | A+ | 8 | 261441092 | 370001000 | 631442092 |
+
+```SQL
+Select *
+From relationship_table
+Where film like '%incredible%'
+```
+
+| Film | rotten_tomatoes_score | metacritic_score | cinema_score | imdb_score | box_office_us_canada | box_office_other | box_office_worldwide | number_of_awards_won |
+|------|-----------------------|------------------|--------------|------------|----------------------|------------------|----------------------|----------------------|
+| The Incredibles | 97 | 90 | A+ | 8 | 261441092 | 370001000 | 631442092 | 2 |
+
+The analysis above shows that the original Incredibles film outperformed the sequel in ratings and received two awards, while Incredibles 2 generated higher box-office revenue. This demonstrates how sequels may achieve greater commercial success but not always match the critical acclaim of their predecessors.
+
+
 
 ### 4. Have genres and ratings evolved over time?
