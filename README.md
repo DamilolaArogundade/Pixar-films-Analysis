@@ -3,7 +3,6 @@ This SQL project examines a dataset of Pixar films obtained from Maven Analytics
 
 ## Table of contents
 
-- [Project Overview](https://github.com/DamilolaArogundade/Pixar-films-Analysis?tab=readme-ov-file#project-overview)
 - [Project Scope](https://github.com/DamilolaArogundade/Pixar-films-Analysis#project-scope)
 - [Business Objectives](https://github.com/DamilolaArogundade/Pixar-films-Analysis#business-objectives)
 - [Document Purpose](https://github.com/DamilolaArogundade/Pixar-films-Analysis#business-objectives)
@@ -14,7 +13,6 @@ This SQL project examines a dataset of Pixar films obtained from Maven Analytics
 - Recommendation
 - Conclusion
 
-## Project Overview
 ## Project Scope
 
 The analysis focused on four main areas:
