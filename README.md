@@ -650,5 +650,187 @@ Where film like '%incredible%'
 The analysis above shows that the original Incredibles film outperformed the sequel in ratings and received two awards, while Incredibles 2 generated higher box-office revenue. This demonstrates how sequels may achieve greater commercial success but not always match the critical acclaim of their predecessors.
 
 
-
 ### 4. Have genres and ratings evolved over time?
+
+The purpose of this analysis is to examine how the genres of Pixar films have evolved to identify whether certain genres have remained consistent or if there has been a mix of new and changing themes. It also aims to analyze how movie ratings have trended over the years, determining whether audience and critic scores have improved, declined, or remained steady across different time periods.
+
+**Genres Evolution**
+
+To achieve this, a relationship was established between the Genres table and the Pixar Films table to combine all relevant information into a single dataset, allowing for a more comprehensive analysis of genre trends over time using the query below
+
+```SQL
+Alter table pixar_films
+Add constraint pk_film_pixar_films
+Primary key (film)    
+```
+
+```SQL
+Select pixar_films.film, release_date,category,[value]
+From pixar_films
+Inner join genres
+on
+pixar_films.film = genres.film
+```
+
+Then the table is saved into the database as Genre_overtime using the query below
+
+```SQL
+Select *
+Into Genre_overtime
+From (Select pixar_films.film, release_date,category,[value]
+       From pixar_films
+       Inner join genres
+        on
+        pixar_films.film = genres.film) as dd
+```
+
+```SQL
+Select film, release_date,
+       count (case when [value] = 'adventure' then 1 end) as adventure,
+	   count (case when [value] = 'Animation' then 1 end) as animation,
+	   count (case when [value] = 'comedy' then 1 end) as comedy,
+	   count (case when [value] = 'Action' then 1 end) as [action],
+	   count (case when [value] = 'drama' then 1 end) as drama,
+	   count (case when [value] = 'Family' then 1 end) as family
+From Genre_overtime
+Group by film, release_date
+Order by release_date asc  
+```
+
+| Film | release_date | adventure | animation | comedy | action | drama | family |
+|------|--------------|-----------|-----------|--------|--------|-------|--------|
+| Toy Story | 1995-11-22 | 1 | 1 | 1 | 0 | 0 | 0 | 
+| A Bug's Life | 1998-11-25 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Toy Story 2 | 1999-11-24 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Monsters, Inc. | 2001-11-02 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Finding Nemo | 2003-05-30 | 1 | 1 | 1 | 0 | 0 | 0 |
+| The Incredibles | 2004-11-05 | 1 | 1 | 0 | 1 | 0 | 0 |
+| Cars | 2006-06-09 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Ratatouille | 2007-06-29 | 1 | 1 | 1 | 0 | 0 | 0 |
+| WALL-E | 2008-06-27 | 1 | 1 | 0 | 0 | 0 | 1 |
+| Up | 2009-05-29 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Toy Story 3 | 2010-06-18 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Cars 2 | 2011-06-24 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Brave | 2012-06-22 | 1 | 1 | 0 | 1 | 0 | 0 |
+| Monsters University | 2013-06-21 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Inside Out | 2015-06-19 | 1 | 1 | 1 | 0 | 0 | 0 |
+| The Good Dinosaur | 2015-11-25 | 1 | 1 | 0 | 1 | 0 | 0 |
+| Finding Dory | 2016-06-17 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Cars 3 | 2017-06-16 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Coco | 2017-11-22 | 1 | 1 | 0 | 0 | 1 | 0 |
+| Incredibles 2 | 2018-06-15 | 1 | 1 | 0 | 1 | 0 | 0 |
+| Toy Story 4 | 2019-06-21 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Onward | 2020-03-06 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Soul | 2020-12-25 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Luca | 2021-06-18 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Turning Red | 2022-03-11 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Lightyear | 2022-06-17 | 1 | 1 | 0 | 1 | 0 | 0 |
+| Elemental | 2023-06-16 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Inside Out 2 | 2024-06-14 | 1 | 1 | 1 | 0 | 0 | 0 |
+
+From the analysis above, it was observed that the adventure and animation genres have remained consistent throughout the years, appearing in all Pixar films. The comedy genre, however, has shown less consistency, while other genres such as action, drama, and family appear only occasionally over time.
+
+**Ratings evolution**
+
+To achieve this, a relationship was established between the public response table and the Pixar Films table to combine all relevant information into a single dataset, allowing for a more comprehensive analysis of the ratings over time using the query below
+
+```SQL
+Select pixar_films.film, release_date, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score
+From pixar_films
+Inner join public_response
+on
+pixar_films.film = public_response.film
+```
+
+The table is saved as Ratings_oertime into the database using the query below
+
+```SQL
+Select *
+Into ratings_overtime
+From (Select pixar_films.film, release_date, rotten_tomatoes_score, metacritic_score, cinema_score, imdb_score
+        From pixar_films
+      Inner join public_response
+       on
+        pixar_films.film = public_response.film) as dd
+```
+
+A new column named release_year was added to the Ratings_overtime table to derive the year each movie was released from the dat column using the query below
+
+```SQL
+Alter table Ratings_overtime
+add release_year varchar(50)
+```
+
+```SQL
+Update ratings_overtime
+set release_year = datename (year, release_date) 
+```
+
+The query below was used to analyse the average ratings in the 90s
+
+```SQL
+Select 
+    avg(rotten_tomatoes_score) as avg_rotten,
+	avg(metacritic_score) as avg_metacritic,
+	avg(imdb_score) as avg_imdb
+From ratings_overtime
+Where release_year like '19%'  
+```
+
+| avg_rotten | avg_metacritic | avg_imdb |
+|------------|----------------|----------|
+| 97 | 87 | 7.80000003178914 |
+
+The query below is used to determine the average ratings in the next decade, that is, 2001-2010
+
+```SQL
+Select 
+    avg(rotten_tomatoes_score) as avg_rotten,
+	avg(metacritic_score) as avg_metacritic,
+	avg(imdb_score) as avg_imdb
+From ratings_overtime
+Where release_year in (2001,2002,2003,2004,2005,2006,2007,2008,2009,2010)
+```
+
+| avg_rotten | avg_metacritic | avg_imdb |
+|------------|----------------|----------|
+| 94 | 87 | 8.07500004768372 |
+
+The query below is used to determine the average ratings in the next decade, that is, 2011-2020
+
+```SQL
+Select 
+    avg(rotten_tomatoes_score) as avg_rotten,
+	avg(metacritic_score) as avg_metacritic,
+	avg(imdb_score) as avg_imdb
+From ratings_overtime
+Where release_year in (2011,2012,2013,2014,2015,2016,2017,2018,2019,2020)  
+```
+| avg_rotten | avg_metacritic | avg_imdb |
+|------------|----------------|----------|
+| 83 | 73 | 7.34166657924652 |
+
+The query below is used to determine the average ratings in the next years, that is, 2021-2024
+
+```SQL
+Select 
+    avg(rotten_tomatoes_score) as avg_rotten,
+	avg(metacritic_score) as avg_metacritic,
+	avg(imdb_score) as avg_imdb
+From ratings_overtime
+Where release_year in (2021,2022,2023,2024) 
+```
+
+| avg_rotten | avg_metacritic | avg_imdb |
+|------------|----------------|----------|
+| 84 | 69 | 7.01999998092651 |
+
+From this analysis
+- It was observed that Pixar films released in the 1990s recorded the highest average ratings on Rotten Tomatoes and Metacritic.
+- In the following decade (2001–2010), the average ratings declined compared to the 1990s, although IMDb scores were at their highest during this period. 
+- Between 2011 and 2020, the overall average ratings continued to decline across all platforms.
+- However, in the most recent years (2021–2024), there was a slight improvement in Rotten Tomatoes ratings, while other rating platforms showed a further decrease.
+
+Overall, the analysis shows that Pixar’s film ratings have gradually declined over the years. Movies released in the 1990s received the highest critical acclaim, reflecting strong audience and critic approval during that era. In the following decades, however, there has been a steady decrease in average ratings across most review platforms. While the 2021–2024 period shows a modest improvement on Rotten Tomatoes, the overall trend indicates that Pixar’s more recent films are receiving more varied and less consistent feedback compared to their earlier successes.
+
+
