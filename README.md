@@ -833,4 +833,22 @@ From this analysis
 
 Overall, the analysis shows that Pixar’s film ratings have gradually declined over the years. Movies released in the 1990s received the highest critical acclaim, reflecting strong audience and critic approval during that era. In the following decades, however, there has been a steady decrease in average ratings across most review platforms. While the 2021–2024 period shows a modest improvement on Rotten Tomatoes, the overall trend indicates that Pixar’s more recent films are receiving more varied and less consistent feedback compared to their earlier successes.
 
+## Recommendations
 
+- **Focus on Original Content:** The data shows that Pixar’s original movies generally perform better than sequels in ratings and awards. Focusing on fresh ideas and unique storytelling can help the studio maintain its creative edge.
+- **Invest Wisely in High-Budget Productions:** High-budget films often bring in the best box office results, but not all expensive movies perform equally well. Pixar should continue investing in big projects while using data insights to guide where the money will have the most impact.
+- **Sustain Strong Genres:** Adventure and Animation remain Pixar’s strongest and most consistent genres. The studio should continue building on these strengths while carefully exploring new ideas aligned with audience trends.
+- **Enhance Audience and Critic Alignment:** Ratings have slightly dropped over time, suggesting that audience expectations have changed. Pixar can use audience feedback and review data to better understand what today’s viewers connect with emotionally.
+- **Adopt Data-Driven Planning:** Pixar should make data part of its everyday planning—using it to predict how films might perform, monitor results, and make faster, more informed decisions for future projects.
+
+## Conclusion
+
+This project successfully demonstrated how SQL can be used to draw actionable insights from entertainment data. Key takeaways include the positive correlation between budget and box office success, the general superiority of original films over sequels, and genre/rating trends over time. These findings provide a foundation for making strategic decisions in content creation, budgeting, and marketing within the animation industry.
+
+Thank you for viewing this project. I completed this project to showcase my data analysis skills using a data set from a fictitious company from Mavin Analystics. I am actively seeking data analyst roles and am open to new opportunities. If you are interested in discussing opportunities or have any feedback, I would love to hear from you.
+
+### Contact me
+
+**Email:** Raimotarogundade@gmail.com
+
+**LinkedIn:** 
